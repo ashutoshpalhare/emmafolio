@@ -6,50 +6,63 @@ export default {
   ],
   darkMode: 'class',
   theme: {
-    screens: {
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
-      '2xl': '1536px',
-    },
     extend: {
+      colors: {
+        // Premium Color Palette
+        primary: {
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          200: '#bae6fd',
+          300: '#7dd3fc',
+          400: '#38bdf8',
+          500: '#0ea5e9',
+          600: '#0284c7',
+          700: '#0369a1',
+          800: '#075985',
+          900: '#0c4a6e',
+        },
+        accent: {
+          DEFAULT: '#f59e0b',
+          light: '#fbbf24',
+          dark: '#d97706',
+        },
+        dark: {
+          bg: '#0b0f19',
+          card: '#111827',
+          border: '#1f2937',
+          text: '#e5e7eb',
+          muted: '#9ca3af',
+        },
+        light: {
+          bg: '#f8fafc',
+          card: '#ffffff',
+          border: '#e2e8f0',
+          text: '#0f172a',
+          muted: '#64748b',
+        }
+      },
       fontFamily: {
-        'heading': ['Josefin Sans', 'sans-serif'],
-        'sub-heading': ['Exo 2', 'sans-serif'],
-        'paragraph': ['Rubik', 'sans-serif']
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        heading: ['Space Grotesk', 'Inter', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
-      backgroundColor: {
-        'light-primary': '#edf2f8',
-        'light-primary-2': '#F5F5F5',
-        'light-secondary': '#313bac',
-        'light-accent': '#FFC107',
-        'dark-primary': '#121721',
-        'dark-primary-2': '#1a1a1a',
-        'dark-secondary': '#87CEFA',
-        'dark-accent': '#FFA500',
+      boxShadow: {
+        'glow': '0 0 20px rgba(14, 165, 233, 0.15)',
+        'glow-lg': '0 0 40px rgba(14, 165, 233, 0.25)',
+        'card': '0 4px 20px rgba(0, 0, 0, 0.08)',
+        'card-dark': '0 4px 20px rgba(0, 0, 0, 0.4)',
       },
-      backgroundImage: {
-        'custom-home': "url('/src/assets/images/floating-cogs.svg')"
+      animation: {
+        'float': 'float 6s ease-in-out infinite',
+        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
-      textColor: {
-        'light-primary': '#000000',
-        'light-secondary': '#6e8098',
-        'light-accent': '#FFC107',
-        'dark-primary': '#FFFFFF',
-        'dark-secondary': '#9daec2',
-        'dark-accent': '#FFA500',
-      },
-      width: {
-        '1/10': '10%',
-        '2/10': '20%',
-        '3/10': '30%',
-        '7/10': '70%',
-        '9/10': '90%',
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        }
       }
     },
   },
-  plugins: [
-  ],
+  plugins: [],
 }
-

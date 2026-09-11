@@ -1,112 +1,107 @@
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
-import { BsArrowDown, CgMenuRight, IoCloseSharp, AiOutlineLinkedin, FiGithub } from "react-icons/all";
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { HiMenuAlt3, HiX } from 'react-icons/hi'
+import { FiMoon, FiSun } from 'react-icons/fi'
+import { useDarkMode } from '../hooks/useDarkMode'
 
-import { DarkMode, GetGreetings } from './index';
+const navLinks = [
+  { name: 'Home', href: '#home' },
+  { name: 'About', href: '#about' },
+  { name: 'Skills', href: '#skills' },
+  { name: 'Work', href: '#work' },
+  { name: 'Contact', href: '#contact' },
+]
 
-type TargetRefProp = {
-  targetRef: React.RefObject<HTMLDivElement>
-  toggleShow: boolean
-  setToggleShow: Dispatch<SetStateAction<boolean>>
-}
-
-const Navbar = ({ targetRef, toggleShow, setToggleShow }: TargetRefProp) => {
-  const [prevScrollPos, setPrevScrollPos] = useState<number>(0);
-  const [visible, setVisible] = useState<boolean>(true);
-
-  const navLinksArray: string[] = ["home", "about", "skills", "work", "contact"]
-  const handleToggle = () => {
-    setToggleShow(prev => !prev)
-  }
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const { isDark, toggleDarkMode } = useDarkMode()
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollPos = window.scrollY;
-
-      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
-      setPrevScrollPos(currentScrollPos);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [visible, prevScrollPos]);
-
+    const handleScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
-    <div className={` ${visible ? 'md:flex' : 'md:hidden'} flex app__navbar text-dark-primary/70 dark:text-light-primary md:bg-white/50 md:dark:bg-white/10 transition-colors`} >
-      <div className="flex items-center mt-2 ml-4 md:ml-0 md:mt-0 text-light-primary dark:text-dark-primary/70">
-        <span className="font-bold text-xl">Emma</span>
-        <span className="hidden sm:flex font-bold text-xl">.</span>
-        <span className="hidden sm:flex self-end mb-1">dev</span>
-      </div>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'glass shadow-sm py-3'
+          : 'bg-transparent py-5'
+      }`}
+    >
+      <div className="container-custom flex items-center justify-between">
+        {/* Logo */}
+        <a href="#home" className="font-heading text-xl font-bold tracking-tight">
+          AP<span className="text-primary-500">.</span>
+        </a>
 
-     {/* Mobile */}
-     <div className="md:hidden relative " ref={targetRef}>
-      {/* Menu icon  */}
-        <div className="md:hidden bg-light-accent dark:bg-dark-accent rounded-full p-2 flex justify-center items-center mt-2 mr-4 md:mr-0 md:mt-0" onClick={handleToggle}>
-            <CgMenuRight className="w-5 h-5 "/>
-        </div>
-
-        {/* Sidebar  */}
-        <div className={`${toggleShow ? 'flex' : 'hidden'} flex-col fixed app__navbar__mobile-glass-morph w-7/10 right-0 top-0 h-screen dark:text-dark-primary/80`}>
-              
-              <div className="flex justify-between items-center">
-                <DarkMode className="mt-5 ml-3"/>
-                <IoCloseSharp className="flex self-end mt-5 mr-5 w-5 h-5" onClick={handleToggle} />     
-              </div>
-
-              <div className="flex flex-col w-9/10 mx-auto mt-10">
-                <div className="flex flex-col">
-                  <div className="flex items-center mt-2 ml-2">
-                  <span className="font-bold text-lg">Emma</span>
-                  <span className="flex font-bold text-xl">.</span>
-                  <span className="flex mt-1">dev</span>
-                </div>
-              </div>
-            <div className="w-full h-[2px] bg-white/50"/>
-          </div>
-
-          <ul className="mt-5 ml-5">
-            {navLinksArray.map((item: string) => (
-              <li key={`link-${item}`} className="uppercase" onClick={handleToggle}>
-                <div className="app__navbar-dot mt-2"></div>
-                <a href={`#${item}`} >{item}</a>
-              </li>
-            ))} 
-          </ul>
-
-          <div className="text-light-primary flex items-center mt-10 justify-end">
-            <a href="https://github.com/emmaGH1" target="_blank"><FiGithub className="w-5 h-5 mr-1"/></a> 
-            <a href="https://www.linkedin.com/in/maduakor-emmanuel-5a141b245/"  target="_blank"><AiOutlineLinkedin className="w-5 h-5 mr-2"/></a>
-            <a href="/public/Emmanuel_Maduakor_Resume.pdf" download={true}className="bg-light-secondary flex items-center rounded-md p-2 text-dark-secondary mr-5">
-             Resume <BsArrowDown className="w-5 h-5 ml-1 text-light-primary bg-light-accent dark:bg-dark-accent rounded-full" />
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              className="text-sm font-medium text-light-muted dark:text-dark-muted hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+            >
+              {link.name}
             </a>
-          </div>
-        </div>
-     </div>
+          ))}
+          
+          <button
+            onClick={toggleDarkMode}
+            className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+            aria-label="Toggle dark mode"
+          >
+            {isDark ? <FiSun size={18} /> : <FiMoon size={18} />}
+          </button>
+        </nav>
 
-     {/* Tablets and desktops */}
-      <ul className="hidden md:flex">
-        {navLinksArray.map((item: string) => (
-          <li className="uppercase mx-4 flex flex-col justify-center items-center text-light-primary dark:text-dark-primary" key={`link-${item}`}>
-            <div className="app__navbar-dot mb-1"></div>
-            <a href={`#${item}`}>{item}</a>
-          </li>
-        ))}
-      </ul>
-
-      <div className="hidden md:flex items-center">
-        <div>
-            <DarkMode />
+        {/* Mobile Toggle */}
+        <div className="flex items-center gap-3 md:hidden">
+          <button
+            onClick={toggleDarkMode}
+            className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10"
+          >
+            {isDark ? <FiSun size={18} /> : <FiMoon size={18} />}
+          </button>
+          
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10"
+          >
+            {isOpen ? <HiX size={22} /> : <HiMenuAlt3 size={22} />}
+          </button>
         </div>
       </div>
-    </div>
-  );
-};
 
-export default Navbar;
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="md:hidden glass border-t border-light-border dark:border-dark-border"
+          >
+            <nav className="container-custom py-6 flex flex-col gap-4">
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className="text-lg font-medium py-2"
+                >
+                  {link.name}
+                </a>
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  )
+}
 
-
-
+export default Navbar
